@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="utf-8" />
+    <title>CHIME hospital data</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css" />
+    <link rel="stylesheet" href="css/keen-dashboards.css" />
+    <link rel="stylesheet" href="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/themes/css/cartodb.css" />
+    <link rel="stylesheet" href="css/theme.bootstrap.min.css" />
+    <link rel="stylesheet" href="css/jquery.tablesorter.pager.min.css" />
+    <link rel="stylesheet" href="css/stylesheet.css" />
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" type="text/javascript"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="https://cartodb-libs.global.ssl.fastly.net/cartodb.js/v3/3.15/cartodb.js"></script>
+    <script type="text/javascript" src="js/jquery.tablesorter.min.js"></script>
+    <script type="text/javascript" src="js/jquery.tablesorter.widgets.min.js"></script>
+    <script type="text/javascript" src="js/jquery.tablesorter.pager.min.js"></script>
+    <script type="text/javascript" src="js/numeral.min.js"></script>
+    <script src="js/script.js" type="text/javascript"></script>
+
+    <style type="cartocss/text" id="base-css">
+            #chime_town_v2_map, #chime_zip_v2_map {
+                polygon-fill: #e6e6e6;
+                polygon-opacity: 0.7;
+                line-color: #aaaaaa;
+                line-width: 0.5;
+                line-opacity: 1;
+            }
+    </style>
+
+    <style type="cartocss/text" id="area-css">
+        #hospital_areas_shape {
+            polygon-fill: #FFFFFF;
+            polygon-opacity: 0;
+            line-color: #000000;
+            line-width: 1.5;
+            line-opacity: 1;
+        }
+    </style>
+</head>
+<body class="application">
+    <div class="container-fluid">
+        <div class="small-header">
+            <h4>CHIME hospital data</h4>
+            <h2>Hospital encounters, 2012-2014</h2>
+        </div>
+
+        <p>
+            Choose from the menus below to select a health condition or a social indicator, mapped by town or by zip code.
+            Clicking on an area on the map gives a popup of that value. Check off any hospital areas you would like to focus on.
+        </p>
+
+        <div class="row">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h5 class="panel-title">
+                        <div class="toggler" role="button" data-toggle="collapse" data-target="#options-panel">
+                            Options
+                            <p class="small gray-header">Click to hide/show</p>
+                        </div>
+
+                    </h5>
+                </div>
+                <div class="panel-body panel-collapse collapse in" id="options-panel">
+                    <form id="menus" class="form-horizontal">
+                        <fieldset>
+                            <div class="form-group">
+                                <label for="geography" class="control-label col-md-3">Select geography</label>
+                                <div class="col-md-9">
+                                    <div class="radio">
+                                        <label for="townRadio">
+                                            <input type="radio" name="geography" id="townRadio" value="town" class="query-menu" checked="checked" />
+                                            Display map by town
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label for="zipRadio">
+                                            <input type="radio" name="geography" id="zipRadio" value="zip" class="query-menu" />
+                                            Display map by zip code
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="control-label col-md-3" for="conditionMenu">Select condition or indicator to view</label>
+                                <div class="controls col-md-9">
+                                    <select id="conditionMenu" name="conditionMenu" class="form-control query-menu">
+                                        <optgroup label="Health conditions">
+                                            <option value="diabetes" data-group="all_ages/20_44/45_64/65_74/75_84" data-hosp="all_encounters" data-number="0,0.00">Diabetes</option>
+                                            <option value="homicide" data-group="all_ages/0_19/20_44/45_64/65_74/75_84" data-hosp="all_encounters" data-number="0,0.00">Homicide/purposeful injury</option>
+                                            <option value="substance_abuse" data-group="all_ages/20_44/45_64/65_74/75_84" data-hosp="all_encounters" data-number="0,0.00">Substance abuse</option>
+                                            <option value="heart_disease" data-group="all_ages/20_44/45_64/65_74/75_84" data-hosp="inpatient" data-number="0,0.00">Heart disease</option>
+                                            <option value="dental" data-group="all_ages/20_44/45_64/65_74/75_84" data-hosp="emergency_dept" data-number="0,0.00">Preventable dental conditions</option>
+                                            <option value="asthma_0_4" data-group="no_age" data-hosp="all_encounters" data-number="0.00">Childhood asthma (ages 0-4)</option>
+                                        </optgroup>
+                                        <optgroup label="Social indicators">
+                                            <option value="median_hh_income" data-group="no_age" data-number="$0,0">Median household income</option>
+                                            <option value="severe_housing_burden" data-group="no_age" data-number="0%">Severe housing burden</option>
+                                            <option value="bachelors" data-group="no_age" data-number="0%">Adults with bachelor's degree or higher</option>
+                                            <option value="low_income_children" data-group="no_age" data-number="0%">Low-income children (ages 0-17)</option>
+                                        </optgroup>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ageType" class="control-label col-md-3">Select age grouping type</label>
+                                <div class="col-md-9">
+                                    <div class="radio">
+                                        <label for="ageAdjRadio">
+                                            <input type="radio" name="ageType" id="ageAdjRadio" value="age_adjusted" class="query-menu" checked="checked" />
+                                            Display age-adjusted rates
+                                        </label>
+                                    </div>
+                                    <div class="radio">
+                                        <label for="ageGroupRadio">
+                                            <input type="radio" name="ageType" id="ageGroupRadio" value="age_group" class="query-menu" />
+                                            Display rates by age group
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="ageGroupMenu" class="control-label col-md-3">Select age group</label>
+                                <div class="controls col-md-9">
+                                    <select name="ageGroupMenu" id="ageGroupMenu" disabled class="form-control query-menu age-menu">
+                                        <option value="all_ages" data-group="2">All ages (not age-adjusted)</option>
+                                        <option value="0_19" data-group="1">Ages 0-19</option>
+                                        <option value="20_44" data-group="2">Ages 20-44</option>
+                                        <option value="45_64" data-group="2">Ages 45-64</option>
+                                        <option value="65_74" data-group="2">Ages 65-74</option>
+                                        <option value="75_84" data-group="2">Ages 75-84</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label for="hospitalChecks" class="control-label col-sm-3">Show hospital service areas</label>
+                                <div class="controls col-sm-9">
+                                    <label class="checkbox-inline" for="chkbpt">
+                                        <input type="checkbox" name="area" id="chkbpt" value="Bridgeport" /> Greater Bridgeport
+                                    </label>
+                                    <label class="checkbox-inline" for="chkdby">
+                                        <input type="checkbox" name="area" id="chkdby" value="Danbury" /> Greater Danbury
+                                    </label>
+                                    <label class="checkbox-inline" for="chkgrw">
+                                        <input type="checkbox" name="area" id="chkgrw" value="Greenwich" /> Greater Greenwich
+                                    </label>
+                                    <label class="checkbox-inline" for="chknhv">
+                                        <input type="checkbox" name="area" id="chknhv" value="New_Haven" /> Greater New Haven
+                                    </label>
+                                    <label class="checkbox-inline" for="chknwk">
+                                        <input type="checkbox" name="area" id="chknwk" value="Norwalk" /> Greater Norwalk
+                                    </label>
+                                    <label class="checkbox-inline" for="chkstm">
+                                        <input type="checkbox" name="area" id="chkstm" value="Stamford" /> Greater Stamford
+                                    </label>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="col-md-3 control-label" for="hospButton">Show hospital areas</label>
+                                <div class="col-md-9">
+                                    <button id="hospButton" type="button" class="btn btn-default">Show</button>
+                                    <button id="resetButton" type="button" class="btn btn-danger">Clear</button>
+                                </div>
+                            </div>
+
+                        </fieldset>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <h3><span class="indicator-heading"></span> by <span id="geo-head"></span><span id="age-head"></span></h3>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="chart-wrapper primary">
+                    <div class="chart-title">
+                        <span class="indicator-heading"></span><span id="hosp-head"></span>
+                    </div>
+                    <div class="chart-stage">
+                        <div id="map-container"></div>
+                    </div>
+                    <div class="chart-notes">
+                        Note: Areas with small sample sizes are suppressed for some indicators; CHIME data is only available for certain areas.
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-12">
+                <div id="table-container">
+                    <table id="hospitalTable" class="tablesorter table">
+                        <thead>
+                            <tr>
+                                <th class="col-md-3">Hospital area</th>
+                                <th class="col-md-3">Town</th>
+                                <th class="col-md-3">Zip</th>
+                                <th class="col-md-3">Value</th>
+                            </tr>
+                        </thead>
+                        <tfoot>
+                            <tr>
+                                <th>Hospital area</th>
+                                <th>Town</th>
+                                <th>Zip</th>
+                                <th>Value</th>
+                            </tr>
+
+                        </tfoot>
+                        <tbody></tbody>
+                    </table>
+                    <form class="pager-container form-inline" id="pager-form">
+                        <button type="button" class="btn first"><i class="icon-step-backward glyphicon glyphicon-step-backward"></i></button>
+                        <button type="button" class="btn prev"><i class="icon-arrow-left glyphicon glyphicon-backward"></i></button>
+                        <span class="pagedisplay"></span>
+                        <button type="button" class="btn next"><i class="icon-arrow-right glyphicon glyphicon-forward"></i></button>
+                        <button type="button" class="btn last"><i class="icon-step-forward glyphicon glyphicon-step-forward"></i></button>
+                        <label for="num-rows" class="control-label">No. rows per page</label>
+                        <select class="pagesize input-sm form-control" title="# rows per page" id="num-rows">
+                            <option selected="selected" value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="30">30</option>
+                            <option value="All">All</option>
+                        </select>
+                        <label for="page-num" class="control-label">Jump to page</label>
+                        <select class="gotoPage input-sm form-control" title="Jump to page" id="page-num"></select>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    <p>
+    <footer class="footer">
+        <small class="text-muted">
+            Source: DataHaven analysis (2016) of CHIME hospital data and US Census Bureau American Community Survey 2014 5-year estimates
+        </small>
+    </footer>
+</p>
+
+</body>
+</html>
