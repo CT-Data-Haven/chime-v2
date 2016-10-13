@@ -66,8 +66,8 @@ $(document).ready(function() {
                 'heart_disease_age_adjusted, heart_disease_all_ages, homicide_0_19, homicide_20_44, homicide_45_64, ' +
                 'homicide_65_74, homicide_75_84, homicide_age_adjusted, homicide_all_ages, low_income_children, median_hh_income, ' +
                 'severe_housing_burden, substance_abuse_20_44, substance_abuse_45_64, substance_abuse_65_74, substance_abuse_75_84, ' +
-                'substance_abuse_age_adjusted, substance_abuse_all_ages, town, town2';
-            var zipVars = townVars + ', zip';
+                'substance_abuse_age_adjusted, substance_abuse_all_ages, town';
+            var zipVars = townVars + ', town2, zip';
             var townVarsArr = townVars.split(', ');
             var zipVarsArr = zipVars.split(', ');
 
