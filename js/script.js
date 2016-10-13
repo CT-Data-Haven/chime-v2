@@ -298,8 +298,8 @@ $(document).ready(function() {
 
         var column = condition + age;
 
-        var zip = data.zip ? ', ' + data.zip : '';
-        var town = data.town ? data.town : '';
+        var zip = data.zip ? data.zip : '';
+        var town = data.town ? data.town + ', ' : '';
 
         var rate = data[column] ? numeral(data[column]).format(format) : 'Not available';
 
