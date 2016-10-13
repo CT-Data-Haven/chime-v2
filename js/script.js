@@ -66,7 +66,7 @@ $(document).ready(function() {
                 'heart_disease_age_adjusted, heart_disease_all_ages, homicide_0_19, homicide_20_44, homicide_45_64, ' +
                 'homicide_65_74, homicide_75_84, homicide_age_adjusted, homicide_all_ages, low_income_children, median_hh_income, ' +
                 'severe_housing_burden, substance_abuse_20_44, substance_abuse_45_64, substance_abuse_65_74, substance_abuse_75_84, ' +
-                'substance_abuse_age_adjusted, substance_abuse_all_ages, town';
+                'substance_abuse_age_adjusted, substance_abuse_all_ages, town, town2';
             var zipVars = townVars + ', zip';
             var townVarsArr = townVars.split(', ');
             var zipVarsArr = zipVars.split(', ');
@@ -236,7 +236,7 @@ $(document).ready(function() {
 
     function updateQuery(geo, column) {
         var layer = sublayers[layerID[geo]];
-        var geoStr = geo === 'town' ? 'town' : 'town, zip';
+        var geoStr = geo === 'town' ? 'town' : 'town, town2, zip';
 
         var colors = ['#0c2c84', '#225ea8', '#1d91c0', '#41b6c4', '#7fcdbb', '#c7e9b4', '#ffffcc'];
         var allCSS = $('#base-css').text();
@@ -274,7 +274,8 @@ $(document).ready(function() {
         dataArr.forEach(function(d) {
             d.rateDisplay = d.value === null ? 'Not available' : numeral(d.value).format(format);
             var zip = d.zip ? d.zip : '';
-            var town = d.town ? d.town : '';
+            var town = d.town2 ? d.town2 : ( d.town ? d.town : '' );
+            //var town = d.town ? d.town : '';
             var $row = $('<tr><td></td><td>' + town + '</td><td>' + zip + '</td><td class="text-right">' + d.rateDisplay + '</td></tr>');
             $('tbody').append($row);
             /*if (d.zip) {
@@ -299,7 +300,8 @@ $(document).ready(function() {
         var column = condition + age;
 
         var zip = data.zip ? data.zip : '';
-        var town = data.town ? data.town + ', ' : '';
+        var town = data.town2 ? data.town2 + ', ' : ( data.town ? data.town + ', ' : '' );
+        //var town = data.town ? data.town + ', ' : '';
 
         var rate = data[column] ? numeral(data[column]).format(format) : 'Not available';
 
