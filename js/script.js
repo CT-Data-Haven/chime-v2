@@ -17,7 +17,8 @@ $(document).ready(function() {
     var options = {
         zoom: 9,
         //center: [41.369852, -72.682523]
-        center: [41.5, -72.70]
+        center: [41.5, -72.70],
+        scrollWheelZoom: false
     };
 
     var layerSource = {
@@ -138,7 +139,7 @@ $(document).ready(function() {
                     sublayers[i].hide();
                 }
             }
-            $('#geo-head').text(geo);
+            $('.geo-heading').text(geo);
         });
     }
 
@@ -179,7 +180,7 @@ $(document).ready(function() {
             // replace first underscore with space, replace second with hyphen
             ageStr = age.length > 0 ? ', ' + age.replace('_', '').replace(/_(?=\d)/, '-').replace('_', ' ') : ''; //age.replace(/_/, ' ').replace(/_/, '-') : '';
             //var ageStr = age.replace(/_/, ' ').replace(/_/, '-');
-            $('#age-head').text(ageStr);
+            $('.age-heading').text(ageStr);
             var conditionStr = $condMenu.find('option:selected').text();
             $('.indicator-heading').text(conditionStr);
             // encounter type string, only if data-hosp exists
@@ -241,12 +242,12 @@ $(document).ready(function() {
         var allCSS = $('#base-css').text();
 
         var sql = new cartodb.SQL({ user: 'datahaven' });
-        var queryBin = "SELECT CDB_QuantileBins(array_agg(" + column + "::numeric), 7) FROM chime_" + geo + "_v2_map WHERE " + column + " IS NOT NULL";
+        var queryBin = "SELECT CDB_JenksBins(array_agg(" + column + "::numeric), 7) FROM chime_" + geo + "_v2_map WHERE " + column + " IS NOT NULL";
         var queryTable = "SELECT " + geoStr + ", " + column + " AS value FROM chime_" + geo + "_v2_map WHERE " + column + " IS NOT NULL";
 
         sql.execute(queryBin)
             .done(function(data) {
-                var breaks = data.rows[0].cdb_quantilebins;
+                var breaks = data.rows[0].cdb_jenksbins;
                 breaks.reverse().forEach(function(val, i) {
                     var color = colors[i];
                     allCSS += ' #chime_' + geo + '_v2_map [ ' + column + ' <= ' + val + ' ] { polygon-fill: ' + color + '; }';
@@ -269,7 +270,6 @@ $(document).ready(function() {
     function updateTable(data) {
         var format = $condMenu.find(':selected').data('number');
         $('tbody tr').remove();
-        console.log(data.rows);
         var dataArr = data.rows;
         dataArr.forEach(function(d) {
             d.rateDisplay = d.value === null ? 'Not available' : numeral(d.value).format(format);

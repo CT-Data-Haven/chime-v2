@@ -1,5 +1,5 @@
 .panel {
-    border: 1px solid #e2e2e2;
+    //border: 1px solid #e2e2e2;
 }
 
 #map-container {
@@ -36,6 +36,10 @@
     margin-right: 8px;
 }
 
+#pager-form {
+    margin: 12px 0 12px 0;
+}
+
 .table-hover > tbody > tr:hover {
-    background-color: #addef4;
+    background-color: #bbeaf0;
 }

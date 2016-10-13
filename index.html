@@ -59,7 +59,6 @@
                             Options
                             <p class="small gray-header">Click to hide/show</p>
                         </div>
-
                     </h5>
                 </div>
                 <div class="panel-body panel-collapse collapse in" id="options-panel">
@@ -176,7 +175,7 @@
         </div>
 
         <div class="row">
-            <h3><span class="indicator-heading"></span> by <span id="geo-head"></span><span id="age-head"></span></h3>
+            <h3><span class="indicator-heading"></span> by <span id="geo-head" class="geo-heading"></span><span id="age-head" class="age-heading"></span></h3>
         </div>
 
         <div class="row">
@@ -196,45 +195,46 @@
         </div>
 
         <div class="row">
-            <div class="col-md-12">
-                <div id="table-container">
-                    <table id="hospitalTable" class="tablesorter table">
-                        <thead>
-                            <tr>
-                                <th class="col-md-3">Hospital area</th>
-                                <th class="col-md-3">Town</th>
-                                <th class="col-md-3">Zip</th>
-                                <th class="col-md-3" data-placeholder="Example: <100">Value</th>
-                            </tr>
-                        </thead>
-                        <tfoot>
-                            <tr>
-                                <th>Hospital area</th>
-                                <th>Town</th>
-                                <th>Zip</th>
-                                <th>Value</th>
-                            </tr>
-
-                        </tfoot>
-                        <tbody></tbody>
-                    </table>
-                    <form class="pager-container form-inline" id="pager-form">
-                        <button type="button" class="btn first"><i class="icon-step-backward glyphicon glyphicon-step-backward"></i></button>
-                        <button type="button" class="btn prev"><i class="icon-arrow-left glyphicon glyphicon-backward"></i></button>
-                        <span class="pagedisplay"></span>
-                        <button type="button" class="btn next"><i class="icon-arrow-right glyphicon glyphicon-forward"></i></button>
-                        <button type="button" class="btn last"><i class="icon-step-forward glyphicon glyphicon-step-forward"></i></button>
-                        <label for="num-rows" class="control-label">No. rows per page</label>
-                        <select class="pagesize input-sm form-control" title="# rows per page" id="num-rows">
-                            <option selected="selected" value="10">10</option>
-                            <option value="20">20</option>
-                            <option value="30">30</option>
-                            <option value="All">All</option>
-                        </select>
-                        <label for="page-num" class="control-label">Jump to page</label>
-                        <select class="gotoPage input-sm form-control" title="Jump to page" id="page-num"></select>
-                    </form>
+            <div class="panel panel-default col-md-12" id="table-container">
+                <div class="panel-heading">
+                    <h4><span class="indicator-heading"></span> by <span class="geo-heading"></span><span class="age-heading"></span></h4>
                 </div>
+                <table id="hospitalTable" class="tablesorter table">
+                    <thead>
+                        <tr>
+                            <th class="col-md-3">Hospital area</th>
+                            <th class="col-md-3">Town</th>
+                            <th class="col-md-3">Zip</th>
+                            <th class="col-md-3" data-placeholder="Example: <100">Value</th>
+                        </tr>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Hospital area</th>
+                            <th>Town</th>
+                            <th>Zip</th>
+                            <th>Value</th>
+                        </tr>
+
+                    </tfoot>
+                    <tbody></tbody>
+                </table>
+                <form class="pager-container form-inline" id="pager-form">
+                    <button type="button" class="btn first"><i class="icon-step-backward glyphicon glyphicon-step-backward"></i></button>
+                    <button type="button" class="btn prev"><i class="icon-arrow-left glyphicon glyphicon-backward"></i></button>
+                    <span class="pagedisplay"></span>
+                    <button type="button" class="btn next"><i class="icon-arrow-right glyphicon glyphicon-forward"></i></button>
+                    <button type="button" class="btn last"><i class="icon-step-forward glyphicon glyphicon-step-forward"></i></button>
+                    <label for="num-rows" class="control-label">No. rows per page</label>
+                    <select class="pagesize input-sm form-control" title="# rows per page" id="num-rows">
+                        <option selected="selected" value="10">10</option>
+                        <option value="20">20</option>
+                        <option value="30">30</option>
+                        <option value="All">All</option>
+                    </select>
+                    <label for="page-num" class="control-label">Jump to page</label>
+                    <select class="gotoPage input-sm form-control" title="Jump to page" id="page-num"></select>
+                </form>
             </div>
         </div>
 
