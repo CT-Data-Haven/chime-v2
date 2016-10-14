@@ -27,12 +27,12 @@
     float: right;
     color: grey;
 }
-.panel-heading a.collapsed:after {
+.panel-heading .collapsed:after {
     content:"\e080";
 }
 
 .gray-header {
-    color: #555555;
+    color: gray;
     float: right;
 }
 
