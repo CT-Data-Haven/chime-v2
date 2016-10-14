@@ -66,7 +66,7 @@ $(document).ready(function() {
                 'heart_disease_age_adjusted, heart_disease_all_ages, homicide_0_19, homicide_20_44, homicide_45_64, ' +
                 'homicide_65_74, homicide_75_84, homicide_age_adjusted, homicide_all_ages, low_income_children, median_hh_income, ' +
                 'severe_housing_burden, substance_abuse_20_44, substance_abuse_45_64, substance_abuse_65_74, substance_abuse_75_84, ' +
-                'substance_abuse_age_adjusted, substance_abuse_all_ages, town';
+                'substance_abuse_age_adjusted, substance_abuse_all_ages, town, personal, financial, qos, walkability';
             var zipVars = townVars + ', town2, zip';
             var townVarsArr = townVars.split(', ');
             var zipVarsArr = zipVars.split(', ');
@@ -111,7 +111,7 @@ $(document).ready(function() {
             $('#hospitalTable').tablesorter({
                 //widthFixed: true,
                 sortList: [
-                    [1, 0]
+                    [2, 0]
                 ],
                 theme: 'bootstrap',
                 headerTemplate: '{content} {icon}',
@@ -147,6 +147,7 @@ $(document).ready(function() {
         var geo;
         var condition;
         $('.query-menu').change(function() {
+
             geo = $geoMenu.filter(':checked').val();
             condition = $condMenu.val();
             var type = $typeMenu.filter(':checked').val();
@@ -159,11 +160,17 @@ $(document).ready(function() {
             }
             // set age after looking at groups
             if (groupArr[0] === 'no_age') {
-                $ageMenu.prop('disabled', true);
+                $ageMenu.prop({'disabled': true,
+                               'selectedIndex': 0
+                });
+                $typeMenu.first().prop('checked', true); // reset to first radio button when no_age chosen
+
                 age = '';
+                $('.age-slider').slideUp();
             } else if (type === 'age_adjusted') {
                 $ageMenu.prop('disabled', true);
                 age = '_age_adjusted';
+                $('.age-slider').slideDown();
             } else {
                 // if grouped age, turn off all age groups, turn ones from groupArr back on
                 $ageMenu.prop('disabled', false);
@@ -174,6 +181,7 @@ $(document).ready(function() {
                     }
                 });
                 age = '_' + $ageMenu.val();
+                $('.age-slider').slideDown();
             }
 
             // build strings for heading
@@ -185,7 +193,7 @@ $(document).ready(function() {
             $('.indicator-heading').text(conditionStr);
             // encounter type string, only if data-hosp exists
             var hosp = $condMenu.find(':selected').data('hosp');
-            var hospStr = hosp ? ' rate per 10,000 residents, ' + hosp.replace(/_/, ' ') : '';
+            var hospStr = hosp ? ' per 10,000 residents, ' + hosp.replace(/_/, ' ') : '';
             $('#hosp-head').text(hospStr);
 
             var column = condition + age;
@@ -243,7 +251,7 @@ $(document).ready(function() {
 
         var sql = new cartodb.SQL({ user: 'datahaven' });
         var queryBin = "SELECT CDB_JenksBins(array_agg(" + column + "::numeric), 7) FROM chime_" + geo + "_v2_map WHERE " + column + " IS NOT NULL";
-        var queryTable = "SELECT " + geoStr + ", " + column + " AS value FROM chime_" + geo + "_v2_map WHERE " + column + " IS NOT NULL";
+        var queryTable = "SELECT " + geoStr + ", " + column + " AS value, cartodb_id FROM chime_" + geo + "_v2_map WHERE " + column + " IS NOT NULL";
 
         sql.execute(queryBin)
             .done(function(data) {
@@ -271,12 +279,14 @@ $(document).ready(function() {
         var format = $condMenu.find(':selected').data('number');
         $('tbody tr').remove();
         var dataArr = data.rows;
+
         dataArr.forEach(function(d) {
             d.rateDisplay = d.value === null ? 'Not available' : numeral(d.value).format(format);
             var zip = d.zip ? d.zip : '';
             var town = d.town2 ? d.town2 : ( d.town ? d.town : '' );
             //var town = d.town ? d.town : '';
-            var $row = $('<tr><td></td><td>' + town + '</td><td>' + zip + '</td><td class="text-right">' + d.rateDisplay + '</td></tr>');
+            var $row = $('<tr><td>' + town + '</td><td>' + zip + '</td><td class="text-right">' + d.rateDisplay + '</td></tr>');
+            $row.data('cartodb_id', d.cartodb_id);
             $('tbody').append($row);
             /*if (d.zip) {
                 $('.hideable').show();
@@ -284,6 +294,11 @@ $(document).ready(function() {
                 $('.hideable').hide();
             }*/
         });
+
+        $('tr').click(function(e) {
+            console.log($(this).data('cartodb_id'));
+        });
+
         $('#hospitalTable').trigger('update');
 
     }
@@ -300,8 +315,9 @@ $(document).ready(function() {
         var column = condition + age;
 
         var zip = data.zip ? data.zip : '';
-        var town = data.town2 ? data.town2 + ', ' : ( data.town ? data.town + ', ' : '' );
-        //var town = data.town ? data.town + ', ' : '';
+        var town = data.town2 ? data.town2 + ' ' : ( data.town ? data.town + ' ' : '' );
+
+        console.log(data);
 
         var rate = data[column] ? numeral(data[column]).format(format) : 'Not available';
 
