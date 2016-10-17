@@ -154,6 +154,18 @@ $(document).ready(function() {
 
             var groupArr = $condMenu.find(':selected').data('group').split('/');
 
+            // if an index is selected as condition, select town for geo and disable zip
+            if (geo === 'zip') {
+                $condMenu.find('[data-geo="town"]').prop('disabled', true);
+            } else {
+                $condMenu.find('[data-geo="town"]').prop('disabled', false);
+            }
+            if ($condMenu.find(':selected').data('geo') === 'town') {
+                $('input[type=radio][value=zip]').attr('disabled', true);
+            } else {
+                $('input[type=radio][value=zip]').attr('disabled', false);
+            }
+
             // if ages = 0-19 and condition is something other than homicide, set age to all ages
             if ($ageMenu.val() === '0_19' & $condMenu.val() !== 'homicide') {
                 $ageMenu.val('all_ages');
