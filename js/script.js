@@ -115,7 +115,8 @@ $(document).ready(function() {
                 ],
                 theme: 'bootstrap',
                 headerTemplate: '{content} {icon}',
-                widgets: ['filter', 'uitheme'],
+                cssInfoBlock: 'avoid-sort',
+                widgets: ['filter', 'uitheme', 'staticRow'],
                 widgetOptions: {
                     filter_columnFilters: true,
                     filter_cssFilter: 'form-control'
@@ -296,10 +297,20 @@ $(document).ready(function() {
             d.rateDisplay = d.value === null ? 'Not available' : numeral(d.value).format(format);
             var zip = d.zip ? d.zip : '';
             var town = d.town2 ? d.town2 : ( d.town ? d.town : '' );
-            //var town = d.town ? d.town : '';
+
             var $row = $('<tr><td>' + town + '</td><td>' + zip + '</td><td class="text-right">' + d.rateDisplay + '</td></tr>');
             $row.data('cartodb_id', d.cartodb_id);
+            if (town === 'Connecticut') { // if CT, put row at beginning
+                $row.addClass('highlight');
+                //$row.data('row-index', 0);
+                //$('tbody').prepend($row);
+            } else {
+                $row.addClass('clickable');
+                //$('tbody').append($row);
+            }
             $('tbody').append($row);
+            //var town = d.town ? d.town : '';
+
             /*if (d.zip) {
                 $('.hideable').show();
             } else {
@@ -307,7 +318,7 @@ $(document).ready(function() {
             }*/
         });
 
-        $('tr').click(function(e) {
+        $('tr.clickable').click(function(e) {
             // query for entry with this id. Need to get data on geometry:
             var query = "SELECT *, ST_X(ST_Centroid(the_geom)) AS lon, ST_Y(ST_Centroid(the_geom)) AS lat FROM chime_" + geo + "_v2_map WHERE cartodb_id = " + $(this).data('cartodb_id');
             var sql = new cartodb.SQL({ user: 'datahaven' });
