@@ -268,14 +268,14 @@ $(document).ready(function() {
             });
         sql.execute(queryTable)
             .done(function(data) {
-                updateTable(data);
+                updateTable(data, geo, column);
             })
             .error(function(err) {
                 console.log(err);
             });
     }
 
-    function updateTable(data) {
+    function updateTable(data, geo, column) {
         var format = $condMenu.find(':selected').data('number');
         $('tbody tr').remove();
         var dataArr = data.rows;
@@ -296,7 +296,21 @@ $(document).ready(function() {
         });
 
         $('tr').click(function(e) {
-            console.log($(this).data('cartodb_id'));
+            // query for entry with this id. Need to get data on geometry:
+            var query = "SELECT *, ST_X(ST_Centroid(the_geom)) AS lon, ST_Y(ST_Centroid(the_geom)) AS lat FROM chime_" + geo + "_v2_map WHERE cartodb_id = " + $(this).data('cartodb_id');
+            var sql = new cartodb.SQL({ user: 'datahaven' });
+            sql.execute(query)
+                .done(function(data) {
+                    //console.log(data);
+                    var lon = data.rows[0].lon;
+                    var lat = data.rows[0].lat;
+                    //console.log(lon + ', ' + lat);
+                    sublayers[layerID[geo]].trigger('featureClick', null, [lat, lon], null, data.rows[0]);
+                })
+                .error(function(err) {
+                    console.log(err);
+                });
+
         });
 
         $('#hospitalTable').trigger('update');
@@ -316,8 +330,6 @@ $(document).ready(function() {
 
         var zip = data.zip ? data.zip : '';
         var town = data.town2 ? data.town2 + ' ' : ( data.town ? data.town + ' ' : '' );
-
-        console.log(data);
 
         var rate = data[column] ? numeral(data[column]).format(format) : 'Not available';
 
