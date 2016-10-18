@@ -205,9 +205,12 @@ $(document).ready(function() {
             var conditionStr = $condMenu.find('option:selected').text();
             $('.indicator-heading').text(conditionStr);
             // encounter type string, only if data-hosp exists
-            var hosp = $condMenu.find(':selected').data('hosp');
-            var hospStr = hosp ? ' per 10,000 residents, ' + hosp.replace(/_/, ' ') : '';
-            $('#hosp-head').text(hospStr);
+            //var hosp = $condMenu.find(':selected').data('hosp');
+            //var hospStr = hosp ? ' per 10,000 residents, ' + hosp.replace(/_/, ' ') : '';
+            //$('#hosp-head').text(hospStr);
+            // add class .definition-show to display definition based on value of condition
+            $('.definition').removeClass('definition-show'); // clear current definition
+            $('#def-' + condition).addClass('definition-show');
 
             var column = condition + age;
 
