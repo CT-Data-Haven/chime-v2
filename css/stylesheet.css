@@ -17,23 +17,21 @@
     cursor: pointer;
 }
 
-#toggler-text {
-    padding-right: 12px;
-}
-
-.panel-heading a:after {
-    font-family:'Glyphicons Halflings';
-    content:"\e114";
+.panel-heading .toggler:after {
+    font-family: 'Glyphicons Halflings';
+    content: "\e114";
     float: right;
-    color: grey;
-}
-.panel-heading .collapsed:after {
-    content:"\e080";
-}
-
-.gray-header {
     color: gray;
-    float: right;
+}
+
+.panel-heading .toggler.collapsed:after {
+    content: "\e080";
+}
+
+#toggle-text {
+    color: gray;
+    font-weight: 600;
+    padding-left: 12px;
 }
 
 #pager-form > label {
@@ -54,4 +52,17 @@
 
 tr.highlight {
     background-color: #f0bbea;
+}
+
+#ct-heading {
+    font-weight: 600;
+    color: #777;
+}
+
+#table-title {
+    padding-left: 5px;
+}
+
+#indicator-h4 {
+    margin-left: 15px;
 }

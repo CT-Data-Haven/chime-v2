@@ -301,6 +301,7 @@ $(document).ready(function() {
             var $row = $('<tr><td>' + town + '</td><td>' + zip + '</td><td class="text-right">' + d.rateDisplay + '</td></tr>');
             $row.data('cartodb_id', d.cartodb_id);
             if (town === 'Connecticut') { // if CT, put row at beginning
+                $('#ct-heading').text('Connecticut: ' + d.rateDisplay);
                 $row.addClass('highlight');
                 //$row.data('row-index', 0);
                 //$('tbody').prepend($row);
