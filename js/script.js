@@ -8,6 +8,11 @@ $(document).ready(function() {
     var ageStr;
     var age;
 
+    $('.toggle-link').click(function(e) {
+        e.preventDefault();
+        $(this).find('span').toggleClass('hidden');
+    });
+
     var layerID = {
         town: 0,
         zip: 1,

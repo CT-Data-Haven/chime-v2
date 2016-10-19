@@ -42,26 +42,30 @@
 <body class="application">
     <div class="container-fluid">
         <p>
-            In 2016, DataHaven created comprehensive well-being indices to support the work of government, philanthropy, and major hospitals throughout Connecticut. Scroll down to visualize a sample of available data. The indices, and this website, also serve as a component of the community health needs assessment (CHNA) for Bridgeport Hospital, Danbury Hospital, Greenwich Hospital, Norwalk Hospital, St. Vincent’s Medical Center, and Stamford Hospital in <a href="http://ctdatahaven.org/reports/fairfield-county-community-wellbeing-index">Fairfield County</a>, and for Milford Hospital and Yale New Haven Hospital in <a href="http://ctdatahaven.org/reports/greater-new-haven-community-index">Greater New Haven</a>.
+            DataHaven has created comprehensive well-being indices to support the work of government, philanthropy, and major hospitals throughout Connecticut. Choose from the menus below to select a hospital encounter type, a social indicator, or a composite index of questions from the DataHaven Community Wellbeing Survey. <a href="http://www.ctdatahaven.org/contact">Contact us</a> with any questions.
         </p>
+        <div id="more-info-content" class="collapse">
+            <p>
+                Selected data may be mapped by town or by zip code. Clicking on an area on the map gives a popup of that value. You may also select hospital service areas you would like to focus on. Only selected towns and zip codes are shown here, based on the availability and reliability of estimates for small areas. DataHaven analysis of hospital encounter data was only available for certain towns and zip codes, while other data are available for towns statewide.
+            </p>
+            <p>
+                The indices, and this website, also serve as a component of the community health needs assessment (CHNA) for Bridgeport Hospital, Danbury Hospital, Greenwich Hospital, Norwalk Hospital, St. Vincent’s Medical Center, and Stamford Hospital in <a href="http://ctdatahaven.org/reports/fairfield-county-community-wellbeing-index">Fairfield County</a>, and for Milford Hospital and Yale New Haven Hospital in <a href="http://ctdatahaven.org/reports/greater-new-haven-community-index">Greater New Haven</a>.
+            </p>
+            <p>
+                <strong>Sources:</strong> DataHaven analysis (2016) of Connecticut Hospital Association CHIME data provided to DataHaven and statewide hospitals for Community Health Needs Assessment, <a href="http://ctdatahaven.org/reports/datahaven-community-wellbeing-survey">2015 DataHaven Community Wellbeing Survey</a> live interviews with 16,820 randomly-selected adults throughout Connecticut and adjacent towns in Westchester County, and US Census Bureau American Community Survey 2014 5-year estimates. Index scores are based on composites of DataHaven Community Wellbeing Survey items. Detailed information on these indicators are available within the <a href="http://ctdatahaven.org/reports/fairfield-county-community-wellbeing-index">Fairfield County Community Wellbeing Index 2016</a> and <a href="http://ctdatahaven.org/reports/greater-new-haven-community-index">Greater New Haven Community Index 2016</a>.
+            </p>
+        </div>
+        <p><strong><a class="text-uppercase toggle-link" data-toggle="collapse" href="#more-info-content"><span>show more...</span><span class="hidden">show less...</span></a></strong></p>
 
-        <p>
-            Choose from the menus below to select a hospital encounter type, a social indicator, or a composite index of questions from the DataHaven Community Wellbeing Survey. Selected data may be mapped by town or by zip code. Clicking on an area on the map gives a popup of that value. You may also select hospital service areas you would like to focus on.
-        </p>
 
-        <p>
-            <strong>Sources:</strong> DataHaven analysis (2016) of Connecticut Hospital Association CHIME data provided to DataHaven and statewide hospitals for Community Health Needs Assessment, <a href="http://ctdatahaven.org/reports/datahaven-community-wellbeing-survey">2015 DataHaven Community Wellbeing Survey</a> live interviews with 16,820 randomly-selected adults throughout Connecticut and adjacent towns in Westchester County, and US Census Bureau American Community Survey 2014 5-year estimates. Index scores are based on composites of DataHaven Community Wellbeing Survey items. Detailed information on these indicators are available within the <a href="http://ctdatahaven.org/reports/fairfield-county-community-wellbeing-index">Fairfield County Community Wellbeing Index 2016</a> and <a href="http://ctdatahaven.org/reports/greater-new-haven-community-index">Greater New Haven Community Index 2016</a>.
-        </p>
-        <p>
-            Note: Only selected towns and zip codes are shown here, based on the availability and reliability of estimates for small areas. DataHaven analysis of hospital encounter data was only available for certain towns and zip codes, while other data are available for all towns statewide. Contact DataHaven for further details.
-        </p>
 
         <div class="row">
             <div class="panel panel-default">
                 <div class="panel-heading">
-                    <h5 class="panel-title toggler" data-toggle="collapse" data-target="#options-panel">
+                    <h5 class="panel-title toggler toggle-link" data-toggle="collapse" data-target="#options-panel">
                         Options
-                        <small class="gray-header" id="toggle-text">Click to hide / show</small>
+                        <small id="toggle-text">Click to <span>hide</span><span class="hidden">show</span></small>
+                        <!-- <small class="gray-header" id="toggle-text">Click to hide / show</small> -->
                     </h5>
                 </div>
                 <div class="panel-body panel-collapse collapse in" id="options-panel">
@@ -103,7 +107,7 @@
                                             <option value="bachelors" data-group="no_age" data-number="0%">Adults with bachelor's degree or higher</option>
                                             <option value="low_income_children" data-group="no_age" data-number="0%">Low-income children (ages 0-17)</option>
                                         </optgroup>
-                                        <optgroup label="DataHaven Community Wellbeing Survey indices">
+                                        <optgroup label="DataHaven Community Wellbeing Survey indices (by town only)">
                                             <option value="personal" data-group="no_age" data-number="0,0" data-geo="town">Personal Wellbeing Index</option>
                                             <option value="financial" data-group="no_age" data-number="0,0" data-geo="town">Financial Security Index</option>
                                             <option value="qos" data-group="no_age" data-number="0,0" data-geo="town">Quality of Society Index</option>
@@ -146,34 +150,43 @@
                             </div>
 
                             <div class="form-group">
-                                <label for="hospitalChecks" class="control-label col-sm-3">Show hospital service areas</label>
-                                <div class="controls col-sm-9">
-                                    <label class="checkbox-inline" for="chkbpt">
-                                        <input type="checkbox" name="area" id="chkbpt" value="Bridgeport" /> Greater Bridgeport
-                                    </label>
-                                    <label class="checkbox-inline" for="chkdby">
-                                        <input type="checkbox" name="area" id="chkdby" value="Danbury" /> Greater Danbury
-                                    </label>
-                                    <label class="checkbox-inline" for="chkgrw">
-                                        <input type="checkbox" name="area" id="chkgrw" value="Greenwich" /> Greater Greenwich
-                                    </label>
-                                    <label class="checkbox-inline" for="chknhv">
-                                        <input type="checkbox" name="area" id="chknhv" value="New_Haven" /> Greater New Haven
-                                    </label>
-                                    <label class="checkbox-inline" for="chknwk">
-                                        <input type="checkbox" name="area" id="chknwk" value="Norwalk" /> Greater Norwalk
-                                    </label>
-                                    <label class="checkbox-inline" for="chkstm">
-                                        <input type="checkbox" name="area" id="chkstm" value="Stamford" /> Greater Stamford
-                                    </label>
+                                <div class="col-sm-3"></div>
+                                <div class="col-sm-9">
+                                    <a class="" data-toggle="collapse" href="#hospitalForms"><span>Show </span><span class="hidden">Hide </span>hospital options</a>
                                 </div>
                             </div>
 
-                            <div class="form-group">
-                                <label class="col-md-3 control-label" for="hospButton">Show hospital areas</label>
-                                <div class="col-md-9">
-                                    <button id="hospButton" type="button" class="btn btn-default">Show</button>
-                                    <button id="resetButton" type="button" class="btn btn-danger">Clear</button>
+                            <div class="collapse" id="hospitalForms">
+                                <div class="form-group hospital-form">
+                                    <label for="hospitalChecks" class="control-label col-sm-3">Select hospital service areas</label>
+                                    <div class="controls col-sm-9">
+                                        <label class="checkbox-inline" for="chkbpt">
+                                            <input type="checkbox" name="area" id="chkbpt" value="Bridgeport" /> Greater Bridgeport
+                                        </label>
+                                        <label class="checkbox-inline" for="chkdby">
+                                            <input type="checkbox" name="area" id="chkdby" value="Danbury" /> Greater Danbury
+                                        </label>
+                                        <label class="checkbox-inline" for="chkgrw">
+                                            <input type="checkbox" name="area" id="chkgrw" value="Greenwich" /> Greater Greenwich
+                                        </label>
+                                        <label class="checkbox-inline" for="chknhv">
+                                            <input type="checkbox" name="area" id="chknhv" value="New_Haven" /> Greater New Haven
+                                        </label>
+                                        <label class="checkbox-inline" for="chknwk">
+                                            <input type="checkbox" name="area" id="chknwk" value="Norwalk" /> Greater Norwalk
+                                        </label>
+                                        <label class="checkbox-inline" for="chkstm">
+                                            <input type="checkbox" name="area" id="chkstm" value="Stamford" /> Greater Stamford
+                                        </label>
+                                    </div>
+                                </div>
+
+                                <div class="form-group hospital-form">
+                                    <label class="col-md-3 control-label" for="hospButton">Draw hospital areas</label>
+                                    <div class="col-md-9">
+                                        <button id="hospButton" type="button" class="btn btn-default">Show</button>
+                                        <button id="resetButton" type="button" class="btn btn-danger">Clear</button>
+                                    </div>
                                 </div>
                             </div>
 
