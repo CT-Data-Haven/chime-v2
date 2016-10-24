@@ -347,7 +347,7 @@ $(document).ready(function() {
 
             var $row = $('<tr><td>' + region + '</td><td>' + town + '</td><td>' + zip + '</td><td class="text-right">' + d.rateDisplay + '</td></tr>');
             $row.data('cartodb_id', d.cartodb_id);
-            if (town === 'Connecticut') { // if CT, put row at beginning--currently not staying frozen at top
+            if (town === 'Connecticut' || region === 'Connecticut') { // if CT, put row at beginning--currently not staying frozen at top
                 $('#ct-heading').text('Connecticut: ' + d.rateDisplay);
                 $row.addClass('highlight');
             } else {
