@@ -39,8 +39,12 @@
     margin-right: 8px;
 }
 
+#pager-form > select {
+    margin-bottom: 4px;
+}
+
 #pager-form {
-    margin: 12px 0 12px 0;
+    margin-bottom: 12px;
 }
 
 .table-hover > tbody > tr:hover {
@@ -65,10 +69,6 @@ tr.highlight {
     margin-left: 15px;
 }
 
-.definition {
-    display: none;
-}
-
-.definition-show {
-    display: inline;
+#hospitalTable {
+    margin-bottom: 12px;
 }

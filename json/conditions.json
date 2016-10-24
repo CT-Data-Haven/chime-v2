@@ -1,0 +1,223 @@
+{
+    "selects": {
+        "select": [
+            {
+                "id": "townSelect",
+                "value": "town",
+                "optgroup": [
+                    {
+                        "label": "Hospital encounter types",
+                        "options": [
+                            {
+                                "name": "Diabetes hospital encounter rate",
+                                "value": "diabetes",
+                                "ages": ["all_ages", "20_44", "45_64", "65_74", "75_84"],
+                                "number": "0,0.00"
+                            },
+                            {
+                                "name": "Homicide/purposeful injury hospital encounter rate",
+                                "value": "homicide",
+                                "ages": ["all_ages", "0_19", "20_44", "45_64", "65_74", "75_84"],
+                                "number": "0,0.00"
+                            },
+                            {
+                                "name": "Substance abuse hospital encounter rate",
+                                "value": "substance_abuse",
+                                "ages": ["all_ages", "20_44", "45_64", "65_74", "75_84"],
+                                "number": "0,0.00"
+                            },
+                            {
+                                "name": "Heart disease hospital encounter rate",
+                                "value": "heart_disease",
+                                "ages": ["all_ages", "20_44", "45_64", "65_74", "75_84"],
+                                "number": "0,0.00"
+                            },
+                            {
+                                "name": "Preventable dental conditions hospital encounter rate",
+                                "value": "dental",
+                                "ages": ["all_ages", "20_44", "45_64", "65_74", "75_84"],
+                                "number": "0,0.00"
+                            },
+                            {
+                                "name": "Childhood asthma (ages 0-4) hospital encounter rate",
+                                "value": "asthma_0_4",
+                                "ages": [],
+                                "number": "0,0.00"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Social indicators",
+                        "options": [
+                            {
+                                "name": "Median household income",
+                                "value": "median_hh_income",
+                                "ages": [],
+                                "number": "$0,0"
+                            },
+                            {
+                                "name": "Severe housing burden",
+                                "value": "severe_housing_burden",
+                                "ages": [],
+                                "number": "0%"
+                            },
+                            {
+                                "name": "Adults with bachelor's degree or higher",
+                                "value": "bachelors",
+                                "ages": [],
+                                "number": "0%"
+                            },
+                            {
+                                "name": "Low-income children (ages 0-17)",
+                                "value": "low_income_children",
+                                "ages": [],
+                                "number": "0%"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "DataHaven Community Wellbeing Survey indices",
+                        "options": [
+                            {
+                                "name": "Personal Wellbeing Index",
+                                "value": "personal",
+                                "ages": [],
+                                "number": "0,0"
+                            },
+                            {
+                                "name": "Financial Security Index",
+                                "value": "financial",
+                                "ages": [],
+                                "number": "0,0"
+                            },
+                            {
+                                "name": "Quality of Society Index",
+                                "value": "qos",
+                                "ages": [],
+                                "number": "0,0"
+                            },
+                            {
+                                "name": "Walkability Index",
+                                "value": "walkability",
+                                "ages": [],
+                                "number": "0,0"
+                            }
+                        ]
+                    }
+                ]
+            },
+
+            {
+                "id": "zipSelect",
+                "value": "zip",
+                "optgroup": [
+                    {
+                        "label": "Hospital encounter types",
+                        "options": [
+                            {
+                                "name": "Diabetes hospital encounter rate",
+                                "value": "diabetes",
+                                "ages": ["all_ages", "20_44", "45_64", "65_74", "75_84"],
+                                "number": "0,0.00"
+                            },
+                            {
+                                "name": "Homicide/purposeful injury hospital encounter rate",
+                                "value": "homicide",
+                                "ages": ["all_ages", "0_19", "20_44", "45_64", "65_74", "75_84"],
+                                "number": "0,0.00"
+                            },
+                            {
+                                "name": "Substance abuse hospital encounter rate",
+                                "value": "substance_abuse",
+                                "ages": ["all_ages", "20_44", "45_64", "65_74", "75_84"],
+                                "number": "0,0.00"
+                            },
+                            {
+                                "name": "Heart disease hospital encounter rate",
+                                "value": "heart_disease",
+                                "ages": ["all_ages", "20_44", "45_64", "65_74", "75_84"],
+                                "number": "0,0.00"
+                            },
+                            {
+                                "name": "Preventable dental conditions hospital encounter rate",
+                                "value": "dental",
+                                "ages": ["all_ages", "20_44", "45_64", "65_74", "75_84"],
+                                "number": "0,0.00"
+                            },
+                            {
+                                "name": "Childhood asthma (ages 0-4) hospital encounter rate",
+                                "value": "asthma_0_4",
+                                "ages": [],
+                                "number": "0,0.00"
+                            }
+                        ]
+                    },
+                    {
+                        "label": "Social indicators",
+                        "options": [
+                            {
+                                "name": "Median household income",
+                                "value": "median_hh_income",
+                                "ages": [],
+                                "number": "$0,0"
+                            },
+                            {
+                                "name": "Severe housing burden",
+                                "value": "severe_housing_burden",
+                                "ages": [],
+                                "number": "0%"
+                            },
+                            {
+                                "name": "Adults with bachelor's degree or higher",
+                                "value": "bachelors",
+                                "ages": [],
+                                "number": "0%"
+                            },
+                            {
+                                "name": "Low-income children (ages 0-17)",
+                                "value": "low_income_children",
+                                "ages": [],
+                                "number": "0%"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "id": "regionSelect",
+                "value": "region",
+                "optgroup": [
+                    {
+                        "label": "Social indicators",
+                        "options": [
+                            {
+                                "name": "Median household income",
+                                "value": "median_hh_income",
+                                "ages": [],
+                                "number": "$0,0"
+                            },
+                            {
+                                "name": "Severe housing burden",
+                                "value": "severe_housing_burden",
+                                "ages": [],
+                                "number": "0%"
+                            },
+                            {
+                                "name": "Adults with bachelor's degree or higher",
+                                "value": "bachelors",
+                                "ages": [],
+                                "number": "0%"
+                            },
+                            {
+                                "name": "Low-income children (ages 0-17)",
+                                "value": "low_income_children",
+                                "ages": [],
+                                "number": "0%"
+                            }
+                        ]
+                    }
+                ]
+            }
+        ]
+    }
+}

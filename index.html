@@ -46,7 +46,7 @@
         </p>
         <div id="more-info-content" class="collapse">
             <p>
-                Selected data may be mapped by town or by zip code. Clicking on an area on the map gives a popup of that value. You may also select hospital service areas you would like to focus on. Only selected towns and zip codes are shown here, based on the availability and reliability of estimates for small areas. DataHaven analysis of hospital encounter data was only available for certain towns and zip codes, while other data are available for towns statewide.
+                Selected data may be mapped by town, zip code, or region. Clicking on an area on the map gives a popup of that value. You may also select hospital service areas you would like to focus on. Only selected towns, zip codes, and regions are shown here, based on the availability and reliability of estimates for small areas. DataHaven analysis of hospital encounter data was only available for certain towns and zip codes, while other data are available for towns statewide or by region.
             </p>
             <p>
                 The indices, and this website, also serve as a component of the community health needs assessment (CHNA) for Bridgeport Hospital, Danbury Hospital, Greenwich Hospital, Norwalk Hospital, St. Vincent’s Medical Center, and Stamford Hospital in <a href="http://ctdatahaven.org/reports/fairfield-county-community-wellbeing-index">Fairfield County</a>, and for Milford Hospital and Yale New Haven Hospital in <a href="http://ctdatahaven.org/reports/greater-new-haven-community-index">Greater New Haven</a>.
@@ -86,34 +86,19 @@
                                             Display map by zip code
                                         </label>
                                     </div>
+                                    <div class="radio">
+                                        <label for="regionRadio">
+                                            <input type="radio" name="geography" id="regionRadio" value="region" class="query-menu" />
+                                            Display map by region
+                                        </label>
+                                    </div>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label class="control-label col-md-3" for="conditionMenu">Select condition or indicator to view</label>
                                 <div class="controls col-md-9">
-                                    <select id="conditionMenu" name="conditionMenu" class="form-control query-menu">
-                                        <optgroup label="Hospital encounter types">
-                                            <option value="diabetes" data-group="all_ages/20_44/45_64/65_74/75_84" data-hosp="all_encounters" data-number="0,0.00">Diabetes hospital encounter rate</option>
-                                            <option value="homicide" data-group="all_ages/0_19/20_44/45_64/65_74/75_84" data-hosp="all_encounters" data-number="0,0.00">Homicide/purposeful injury hospital encounter rate</option>
-                                            <option value="substance_abuse" data-group="all_ages/20_44/45_64/65_74/75_84" data-hosp="all_encounters" data-number="0,0.00">Substance abuse hospital encounter rate</option>
-                                            <option value="heart_disease" data-group="all_ages/20_44/45_64/65_74/75_84" data-hosp="inpatient" data-number="0,0.00">Heart disease hospital encounter rate</option>
-                                            <option value="dental" data-group="all_ages/20_44/45_64/65_74/75_84" data-hosp="emergency_dept" data-number="0,0.00">Preventable dental conditions hospital encounter rate</option>
-                                            <option value="asthma_0_4" data-group="no_age" data-hosp="all_encounters" data-number="0.00">Childhood asthma (ages 0-4) hospital encounter rate</option>
-                                        </optgroup>
-                                        <optgroup label="Social indicators">
-                                            <option value="median_hh_income" data-group="no_age" data-number="$0,0">Median household income</option>
-                                            <option value="severe_housing_burden" data-group="no_age" data-number="0%">Severe housing burden</option>
-                                            <option value="bachelors" data-group="no_age" data-number="0%">Adults with bachelor's degree or higher</option>
-                                            <option value="low_income_children" data-group="no_age" data-number="0%">Low-income children (ages 0-17)</option>
-                                        </optgroup>
-                                        <optgroup label="DataHaven Community Wellbeing Survey indices (by town only)">
-                                            <option value="personal" data-group="no_age" data-number="0,0" data-geo="town">Personal Wellbeing Index</option>
-                                            <option value="financial" data-group="no_age" data-number="0,0" data-geo="town">Financial Security Index</option>
-                                            <option value="qos" data-group="no_age" data-number="0,0" data-geo="town">Quality of Society Index</option>
-                                            <option value="walkability" data-group="no_age" data-number="0,0" data-geo="town">Walkability Index</option>
-                                        </optgroup>
-                                    </select>
+                                    <select id="conditionMenu" name="conditionMenu" class="form-control query-menu"></select>
                                 </div>
                             </div>
 
@@ -152,7 +137,7 @@
                             <div class="form-group">
                                 <div class="col-sm-3"></div>
                                 <div class="col-sm-9">
-                                    <a class="" data-toggle="collapse" href="#hospitalForms"><span>Show </span><span class="hidden">Hide </span>hospital options</a>
+                                    <a class="toggle-link" data-toggle="collapse" href="#hospitalForms"><span>Show </span><span class="hidden">Hide </span>hospital options</a>
                                 </div>
                             </div>
 
@@ -207,20 +192,20 @@
                 <div class="chart-wrapper primary">
                     <div class="chart-title">
                         <span class="indicator-heading"></span>
-                        <span class="definition" id="def-diabetes"> per 10,000 residents, all encounters</span>
-                        <span class="definition" id="def-homicide"> per 10,000 residents, all encounters</span>
-                        <span class="definition" id="def-substance_abuse"> per 10,000 residents, all encounters</span>
-                        <span class="definition" id="def-heart_disease"> per 10,000 residents, inpatient</span>
-                        <span class="definition" id="def-dental"> per 10,000 residents, emergency department</span>
-                        <span class="definition" id="def-asthma_0_4"> per 10,000 residents, all encounters</span>
-                        <span class="definition" id="def-median_hh_income"> in 2014 dollars</span>
-                        <span class="definition" id="def-severe_housing_burden">&mdash; Percentage of households who pay more than 50% of income towards housing costs</span>
-                        <span class="definition" id="def-bachelors">&mdash; Percentage of adults ages 25+ with Bachelor's or higher</span>
-                        <span class="definition" id="def-low_income_children">&mdash; Percentage of children living in families with low incomes (< 200% federal poverty line)</span>
-                        <span class="definition" id="def-personal">&mdash; Personal Wellbeing Index based on composite of DataHaven Community Wellbeing Survey items</span>
-                        <span class="definition" id="def-financial">&mdash; Financial Security Index based on composite of DataHaven Community Wellbeing Survey items</span>
-                        <span class="definition" id="def-qos">&mdash; Quality of Society Index based on composite of DataHaven Community Wellbeing Survey items</span>
-                        <span class="definition" id="def-walkability">&mdash; Walkability Index based on composite of DataHaven Community Wellbeing Survey items</span>
+                        <span class="definition hidden" id="def-diabetes"> per 10,000 residents, all encounters</span>
+                        <span class="definition hidden" id="def-homicide"> per 10,000 residents, all encounters</span>
+                        <span class="definition hidden" id="def-substance_abuse"> per 10,000 residents, all encounters</span>
+                        <span class="definition hidden" id="def-heart_disease"> per 10,000 residents, inpatient</span>
+                        <span class="definition hidden" id="def-dental"> per 10,000 residents, emergency department</span>
+                        <span class="definition hidden" id="def-asthma_0_4"> per 10,000 residents, all encounters</span>
+                        <span class="definition hidden" id="def-median_hh_income"> in 2014 dollars</span>
+                        <span class="definition hidden" id="def-severe_housing_burden">&mdash; Percentage of households who pay more than 50% of income towards housing costs</span>
+                        <span class="definition hidden" id="def-bachelors">&mdash; Percentage of adults ages 25+ with Bachelor's or higher</span>
+                        <span class="definition hidden" id="def-low_income_children">&mdash; Percentage of children living in families with low incomes (< 200% federal poverty line)</span>
+                        <span class="definition hidden" id="def-personal">&mdash; Personal Wellbeing Index based on composite of DataHaven Community Wellbeing Survey items</span>
+                        <span class="definition hidden" id="def-financial">&mdash; Financial Security Index based on composite of DataHaven Community Wellbeing Survey items</span>
+                        <span class="definition hidden" id="def-qos">&mdash; Quality of Society Index based on composite of DataHaven Community Wellbeing Survey items</span>
+                        <span class="definition hidden" id="def-walkability">&mdash; Walkability Index based on composite of DataHaven Community Wellbeing Survey items</span>
                     </div>
                     <div class="chart-stage">
                         <div id="map-container"></div>
@@ -234,29 +219,31 @@
             <div class="panel panel-default col-md-12" id="table-container">
                 <div class="panel-heading">
                     <h4 class="col-md-12" id="table-title"><span class="indicator-heading"></span> by <span class="geo-heading"></span><span class="age-heading"></span></h4>
-                    <div class="col-md-8">Click on a table row to see that town / zip code's info on the map. Connecticut values shown when available.</div>
-                    <div class="col-md-4" id="ct-heading"></div>
+                    <div class="col-md-9">Click on a table row to see that town, zip code, or region's info on the map. Connecticut values shown when available.</div>
+                    <div class="col-md-3" id="ct-heading"></div>
                     <div class="clearfix"></div>
                 </div>
-                <table id="hospitalTable" class="tablesorter table">
+                <table id="hospitalTable" class="tablesorter table col-md-12">
                     <thead>
                         <tr>
-                            <th class="col-md-4">Town</th>
-                            <th class="col-md-4">Zip</th>
-                            <th class="col-md-4" data-placeholder="Example: <100">Value</th>
+                            <th class="region-col">Region</th>
+                            <th class="town-col">Town</th>
+                            <th class="zip-col">Zip</th>
+                            <th data-placeholder="Example: <100">Value</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                            <th>Town</th>
-                            <th>Zip</th>
+                            <th class="region-col">Region</th>
+                            <th class="town-col">Town</th>
+                            <th class="zip-col">Zip</th>
                             <th>Value</th>
                         </tr>
 
                     </tfoot>
                     <tbody></tbody>
                 </table>
-                <form class="pager-container form-inline" id="pager-form">
+                <div class="pager-container form-inline" id="pager-form">
                     <button type="button" class="btn first"><i class="icon-step-backward glyphicon glyphicon-step-backward"></i></button>
                     <button type="button" class="btn prev"><i class="icon-arrow-left glyphicon glyphicon-backward"></i></button>
                     <span class="pagedisplay"></span>
@@ -271,7 +258,7 @@
                     </select>
                     <label for="page-num" class="control-label">Jump to page</label>
                     <select class="gotoPage input-sm form-control" title="Jump to page" id="page-num"></select>
-                </form>
+                </div>
             </div>
         </div>
 
