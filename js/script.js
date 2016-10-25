@@ -27,7 +27,7 @@ $(document).ready(function() {
     };
 
     var geoStrings = {
-        town: ['town'],
+        town: ['town', 'region'],
         zip: ['town', 'town2', 'zip'],
         region: ['region']
     };
