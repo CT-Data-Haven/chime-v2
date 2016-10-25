@@ -16,7 +16,6 @@ $(document).ready(function() {
 
     $.getJSON('json/conditions.json', function(data) {
         json = data;
-
     });
 
     var layerID = {
@@ -338,6 +337,7 @@ $(document).ready(function() {
         var format = $condMenu.find(':selected').data('number');
         $('tbody tr').remove();
         var dataArr = data.rows;
+        $('#ct-heading').text('');
 
         dataArr.forEach(function(d) {
             d.rateDisplay = d.value === null ? 'Not available' : numeral(d.value).format(format);
@@ -408,10 +408,16 @@ $(document).ready(function() {
         var zip = data.zip ? data.zip : '';
         var town = data.town2 ? data.town2 : ( data.town ? data.town : '' );
         var region = data.region ? data.region : '';
+        if (data.town && data.zip) {
+            town = '(' + town + ')';
+        }
+        if (data.town && data.region) {
+            region = '(' + region + ')';
+        }
 
         var rate = data[column] ? numeral(data[column]).format(format) : 'Not available';
 
-        var $h4 = $('<h4 style="color: #333;">' + region + ' ' + town + ' ' + zip + '</h4>');
+        var $h4 = $('<h4 style="color: #333;">' + zip + ' ' + town + ' ' + region + '</h4>');
         var $h5 = $('<h5 style="color: #666;">' + condStr + ageStr + '</h5>');
         var $p = $('<p>' + rate + '</p>');
         $('.cartodb-popup-content').append($h4, $h5, $p);

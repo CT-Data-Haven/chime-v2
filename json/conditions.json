@@ -215,6 +215,35 @@
                                 "number": "0%"
                             }
                         ]
+                    },
+                    {
+                        "label": "DataHaven Community Wellbeing Survey indices",
+                        "options": [
+                            {
+                                "name": "Personal Wellbeing Index",
+                                "value": "personal",
+                                "ages": [],
+                                "number": "0,0"
+                            },
+                            {
+                                "name": "Financial Security Index",
+                                "value": "financial",
+                                "ages": [],
+                                "number": "0,0"
+                            },
+                            {
+                                "name": "Quality of Society Index",
+                                "value": "qos",
+                                "ages": [],
+                                "number": "0,0"
+                            },
+                            {
+                                "name": "Walkability Index",
+                                "value": "walkability",
+                                "ages": [],
+                                "number": "0,0"
+                            }
+                        ]
                     }
                 ]
             }
