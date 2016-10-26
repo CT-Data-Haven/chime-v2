@@ -2,7 +2,8 @@
 #map-container {
     width: 100%;
     height: 540px;
-
+    background-color: #fafafa;
+    //background-color: #444444;
 }
 
 .small-header > h2 {
