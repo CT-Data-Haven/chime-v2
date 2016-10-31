@@ -406,7 +406,6 @@ function updateTable(data, geo, column) {
 }
 
 function updateInfowindow(data) {
-    $('.cartodb-infowindow').removeClass('hidden');
 
     var geo = $('input[type=radio][name=geography]').filter(':checked').val();
     var $condMenu = $('#conditionsContainer').find('#' + geo + 'Select');
@@ -435,6 +434,9 @@ function updateInfowindow(data) {
     var $div = $('<div></div>').append($h4, $h5, $p);
 
     $('.cartodb-popup-content').html($div);
+
+    // make only this infowindow visible
+    $('.cartodb-infowindow').eq(layerID[geo]).removeClass('hidden');
 }
 
 function buildLegend(breaks, colors, geo) {
