@@ -17,13 +17,13 @@
                             {
                                 "name": "Homicide/purposeful injury hospital encounter rate",
                                 "value": "homicide",
-                                "ages": ["all_ages", "0_19", "20_44", "45_64", "65_74", "75_84"],
+                                "ages": ["all_ages", "0_19", "20_44", "45_64"],
                                 "number": "0,0.00"
                             },
                             {
                                 "name": "Substance abuse hospital encounter rate",
                                 "value": "substance_abuse",
-                                "ages": ["all_ages", "20_44", "45_64", "65_74", "75_84"],
+                                "ages": ["all_ages", "20_44", "45_64", "65_74"],
                                 "number": "0,0.00"
                             },
                             {
@@ -35,7 +35,7 @@
                             {
                                 "name": "Preventable dental conditions hospital encounter rate",
                                 "value": "dental",
-                                "ages": ["all_ages", "20_44", "45_64", "65_74", "75_84"],
+                                "ages": ["all_ages", "20_44", "45_64"],
                                 "number": "0,0.00"
                             },
                             {
@@ -123,13 +123,13 @@
                             {
                                 "name": "Homicide/purposeful injury hospital encounter rate",
                                 "value": "homicide",
-                                "ages": ["all_ages", "0_19", "20_44", "45_64", "65_74", "75_84"],
+                                "ages": ["all_ages", "0_19", "20_44", "45_64"],
                                 "number": "0,0.00"
                             },
                             {
                                 "name": "Substance abuse hospital encounter rate",
                                 "value": "substance_abuse",
-                                "ages": ["all_ages", "20_44", "45_64", "65_74", "75_84"],
+                                "ages": ["all_ages", "20_44", "45_64", "65_74"],
                                 "number": "0,0.00"
                             },
                             {
@@ -141,7 +141,7 @@
                             {
                                 "name": "Preventable dental conditions hospital encounter rate",
                                 "value": "dental",
-                                "ages": ["all_ages", "20_44", "45_64", "65_74", "75_84"],
+                                "ages": ["all_ages", "20_44", "45_64"],
                                 "number": "0,0.00"
                             },
                             {

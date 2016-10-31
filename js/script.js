@@ -23,14 +23,15 @@ var geoStrings = {
 var ageStr;
 var age;
 
-$('.toggle-link').click(function(e) {
-    e.preventDefault();
-    $(this).find('span').toggleClass('hidden');
-});
+
 
 
 $(document).ready(function() {
     init();
+    $('.toggle-link').click(function(e) {
+        e.preventDefault();
+        $(this).find('span').toggleClass('hidden');
+    });
 });
 
 function init() {
@@ -52,6 +53,10 @@ function init() {
         });
 }
 
+// $('.toggle-link').click(function(e) {
+//     e.preventDefault();
+//     $(this).find('span').toggleClass('hidden');
+// });
 
 
 // called by getJSON
@@ -149,9 +154,9 @@ function createMaps(selects) {
                 sublayer.on('featureClick', function(event, latlng, pos, data) {
                     updateInfowindow(data);
                 });
-                //cdb.vis.Vis.addInfowindow(mapObj, sublayer, columnArr[i]);
+
             });
-            //cdb.vis.Vis.addInfowindow(mapObj, sublayers[0], columnArr[0]);
+
         })
         .error(function(err) {
             console.log(err);
@@ -192,6 +197,9 @@ function bindOptions() {
 
 
     $('.query-menu').change(function() {
+        // trigger click on infowindow close button
+        $('.cartodb-infowindow').addClass('hidden');
+
         $condMenu = $conditions.find($('#' + geo + 'Select'));
 
         var type = $typeMenu.filter(':checked').val();
@@ -223,16 +231,20 @@ function bindOptions() {
 
         condition = $condMenu.find(':selected').val();
         ageStr = age.length > 0 ? ', ' + age.replace('_', '').replace(/_(?=\d)/, '-').replace('_', ' ') : '';
-        $('#age-head').text(ageStr);
+        $('.age-heading').text(ageStr);
         $('.indicator-heading').text($condMenu.find(':selected').text());
-        $('.definition').addClass('hidden').filter($('#def' + condition)).removeClass('hidden');
+        $('.definition').addClass('hidden').filter($('#def-' + condition)).removeClass('hidden');
 
         column = condition + age;
 
         updateQuery(geo, column);
 
+        // reset table back to first page
+        $('#hospitalTable').trigger('pageSet', 1);
+
     });
 
+    // when condition changes, set ages back to defaults--age-adjusted, ages menu = all ages
     $conditions.find($('#' + geo + 'Select')).change(function(d) {
         $ageMenu.find('option').eq(0).prop('selected', true);
         $typeMenu.eq(0).prop('checked', true);
@@ -276,7 +288,8 @@ function createTable() {
         }
     }).tablesorterPager({
         container: $('#pager-form'),
-        output: '{startRow} to {endRow} of {totalRows}'
+        output: '{startRow} to {endRow} of {totalRows}',
+        savePages: false
     });
 }
 
@@ -348,8 +361,8 @@ function updateTable(data, geo, column) {
     });
 
 
-
     $tbody.find('tr.clickable').click(function(e) {
+
         // query for entry with this id. Need to get data on geometry:
         var query = "SELECT *, ST_X(ST_Centroid(the_geom)) AS lon, ST_Y(ST_Centroid(the_geom)) AS lat FROM chime_" + geo + "_v2_map WHERE cartodb_id = " + $(this).data('cartodb_id');
         var sql = new cartodb.SQL({ user: 'datahaven' });
@@ -362,6 +375,10 @@ function updateTable(data, geo, column) {
             .error(function(err) {
                 console.log(err);
             });
+        // scroll back to #map-row
+        $('html, body').stop().animate({
+            scrollTop: $('#indicator-h4').offset().top
+        }, 400);
 
     });
 
@@ -389,6 +406,7 @@ function updateTable(data, geo, column) {
 }
 
 function updateInfowindow(data) {
+    $('.cartodb-infowindow').removeClass('hidden');
 
     var geo = $('input[type=radio][name=geography]').filter(':checked').val();
     var $condMenu = $('#conditionsContainer').find('#' + geo + 'Select');
@@ -409,7 +427,7 @@ function updateInfowindow(data) {
         region = '(' + region + ')';
     }
 
-    var rate = data[column] ? numeral(data[column]).format(format) : 'Not available';
+    var rate = data[column] !== undefined ? numeral(data[column]).format(format) : 'Not available';
 
     var $h4 = $('<h4 style="color: #333;">' + zip + ' ' + town + ' ' + region + '</h4>');
     var $h5 = $('<h5 style="color: #666;">' + condStr + ageStr + '</h5>');
