@@ -1,3 +1,5 @@
+
+
 $(document).ready(function() {
 
     var sublayers = [];
@@ -7,22 +9,12 @@ $(document).ready(function() {
     var $ageMenu = $('#ageGroupMenu');
     var ageStr;
     var age;
-    var json;
-
-    $('.toggle-link').click(function(e) {
-        e.preventDefault();
-        $(this).find('span').toggleClass('hidden');
-    });
-
-    $.getJSON('json/conditions.json', function(data) {
-        json = data;
-    });
+    //var json;
 
     var layerID = {
         town: 0,
         zip: 1,
-        region: 2,
-        hosp: 3
+        region: 2
     };
 
     var geoStrings = {
@@ -31,153 +23,164 @@ $(document).ready(function() {
         region: ['region']
     };
 
-    var options = {
-        zoom: 9,
-        //center: [41.369852, -72.682523]
-        center: [41.5, -72.70],
-        scrollWheelZoom: false
-    };
 
-    var layerSource = {
-        user_name: 'datahaven',
-        type: 'cartodb',
-        legends: true,
-        sublayers: [
-            {
-                sql: "SELECT * FROM chime_town_v2_map",
-                cartocss: $('#base-css').text()
-            },
-            {
-                sql: "SELECT * FROM chime_zip_v2_map",
-                cartocss: $('#base-css').text()
-            },
-            {
-                sql: "SELECT * FROM chime_region_v2_map",
-                cartocss: $('#base-css').text()
-            },
-            {
-                sql: "SELECT * FROM hospital_areas_shape",
-                cartocss: $('#area-css').text()
-            }
-        ]
-    };
 
-    var map_obj = new L.map('map-container', options);
+    $('.toggle-link').click(function(e) {
+        e.preventDefault();
+        $(this).find('span').toggleClass('hidden');
+    });
 
-    L.tileLayer('http://{s}.basemaps.cartocdn.com/light_nolabels/{z}/{x}/{y}.png', {
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
-        subdomains: 'abcd'
-    }).addTo(map_obj);
+    $.getJSON('json/conditions.json')
+        .done(function(data) {
+            setup(data);
+        })
+        .fail(function() {
+            var $msg = $('<h4>An error occurred. Please reload to try again. </h4>').addClass('bg-danger');
+            $('body').prepend($msg);
+        });
 
-    cartodb.createLayer(map_obj, layerSource, { https: true })
-        .addTo(map_obj)
-        .done(function(layer) {
 
-            var columnArr = [];
-            $.each(json.selects.select, function(i, select) {
-                var geo = select.value;
-                var opts = [];
 
-                $.each(select.optgroup, function(j, optgroup) {
-                    $.each(optgroup.options, function(k, option) {
-                        if (option.ages.length) {
-                            $.each(option.ages, function(l, age) {
-                                opts.push(option.value + '_' + age);
-                            });
-                            opts.push(option.value + '_age_adjusted'); // don't have age adjusted in json
-                        } else {
-                            opts.push(option.value);
-                        }
 
+
+    function setup(json) {
+
+        var options = {
+            zoom: 9,
+            //center: [41.369852, -72.682523]
+            center: [41.5, -72.70],
+            scrollWheelZoom: false
+        };
+
+        var layerSource = {
+            user_name: 'datahaven',
+            type: 'cartodb',
+            legends: true,
+            sublayers: [
+                {
+                    sql: "SELECT * FROM chime_town_v2_map",
+                    cartocss: $('#base-css').text()
+                },
+                {
+                    sql: "SELECT * FROM chime_zip_v2_map",
+                    cartocss: $('#base-css').text()
+                },
+                {
+                    sql: "SELECT * FROM chime_region_v2_map",
+                    cartocss: $('#base-css').text()
+                }
+                /*,
+                {
+                    sql: "SELECT * FROM hospital_areas_shape",
+                    cartocss: $('#area-css').text()
+                }*/
+            ]
+        };
+
+        var map_obj = new L.map('map-container', options);
+
+        L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> &copy; <a href="http://cartodb.com/attributions">CartoDB</a>',
+            subdomains: 'abcd'
+        }).addTo(map_obj);
+
+        cartodb.createLayer(map_obj, layerSource, { https: true })
+            .addTo(map_obj)
+            .done(function(layer) {
+
+                // need to store set of columns available for each geography--needed to set up interactivity for each layer
+                var columnArr = [];
+                $.each(json.selects.select, function(i, select) {
+                    var geo = select.value;
+                    var opts = [];
+
+                    $.each(select.optgroup, function(j, optgroup) {
+                        $.each(optgroup.options, function(k, option) {
+                            if (option.ages.length) {
+                                $.each(option.ages, function(l, age) {
+                                    opts.push(option.value + '_' + age);
+                                });
+                                opts.push(option.value + '_age_adjusted'); // don't have age adjusted in json
+                            } else {
+                                opts.push(option.value);
+                            }
+
+                        });
+                    });
+
+                    opts = opts.concat(geoStrings[geo]);
+                    columnArr[geo] = opts;
+
+                });
+
+                var geos = ['town', 'zip', 'region'];
+                for (var i = 0; i < layer.getSubLayerCount(); i++) {
+                    sublayers[i] = layer.getSubLayer(i);
+                    sublayers[i].hide();
+                }
+                for (var j = 0; j < layer.getSubLayerCount(); j++) {
+                    sublayers[j].setInteraction(true);
+                    sublayers[j].setInteractivity(columnArr[geos[j]].join(', '));
+                    cdb.vis.Vis.addInfowindow(map_obj, sublayers[j], columnArr[geos[j]]);
+                }
+                sublayers.forEach(function(sublayer) {
+                    sublayer.on('featureClick', function(event, latlng, pos, data) {
+                        updateInfowindow(data);
                     });
                 });
 
-                opts = opts.concat(geoStrings[geo]);
-                columnArr[geo] = opts;
+                //getGeography();
+                getOptions(json);
+                //createAreas(sublayers[layerID.hosp]);
 
-            });
+                // add table
+                $.tablesorter.themes.bootstrap = {
+                    header: 'bootstrap-header',
+                    table: 'table-bordered table-hover',
 
-            var geos = ['town', 'zip', 'region'];
-            for (var i = 0; i < layer.getSubLayerCount(); i++) {
-                sublayers[i] = layer.getSubLayer(i);
-                sublayers[i].hide();
-            }
-            for (var j = 0; j < layer.getSubLayerCount() - 1; j++) {
-                sublayers[j].setInteraction(true);
-                sublayers[j].setInteractivity(columnArr[geos[j]].join(', '));
-                cdb.vis.Vis.addInfowindow(map_obj, sublayers[j], columnArr[geos[j]]);
-            }
-            sublayers.forEach(function(sublayer) {
-                sublayer.on('featureClick', function(event, latlng, pos, data) {
-                    updateInfowindow(data);
+                    sortNone     : '',
+                    sortAsc      : '',
+                    sortDesc     : '',
+                    active       : '', // applied when column is sorted
+                    hover        : '', // custom css required - a defined bootstrap style may not override other classes
+                    // icon class names
+                    icons        : '', // add "icon-white" to make them white; this icon class is added to the <i> in the header
+                    iconSortNone : 'bootstrap-icon-unsorted', // class name added to icon when column is not sorted
+                    iconSortAsc  : 'glyphicon glyphicon-chevron-up', // class name added to icon when column has ascending sort
+                    iconSortDesc : 'glyphicon glyphicon-chevron-down', // class name added to icon when column has descending sort
+                    filterRow    : '', // filter row class; use widgetOptions.filter_cssFilter for the input/select element
+
+                };
+                $('#hospitalTable').tablesorter({
+                    //widthFixed: true,
+                    sortList: [
+                        [3, 0]
+                    ],
+                    theme: 'bootstrap',
+                    headerTemplate: '{content} {icon}',
+                    //cssInfoBlock: 'avoid-sort',
+                    widgets: ['filter', 'uitheme'],
+                    widgetOptions: {
+                        filter_columnFilters: true,
+                        filter_cssFilter: 'form-control'
+                    }
+                }).tablesorterPager({
+                    container: $('.pager-container'),
+                    output: '{startRow} to {endRow} of {totalRows}'
                 });
+
             });
+    }
 
-            //getGeography();
-            getOptions();
-            createAreas(sublayers[layerID.hosp]);
 
-            // add table
-            $.tablesorter.themes.bootstrap = {
-                header: 'bootstrap-header',
-                table: 'table-bordered table-hover',
-
-                sortNone     : '',
-                sortAsc      : '',
-                sortDesc     : '',
-                active       : '', // applied when column is sorted
-                hover        : '', // custom css required - a defined bootstrap style may not override other classes
-                // icon class names
-                icons        : '', // add "icon-white" to make them white; this icon class is added to the <i> in the header
-                iconSortNone : 'bootstrap-icon-unsorted', // class name added to icon when column is not sorted
-                iconSortAsc  : 'glyphicon glyphicon-chevron-up', // class name added to icon when column has ascending sort
-                iconSortDesc : 'glyphicon glyphicon-chevron-down', // class name added to icon when column has descending sort
-                filterRow    : '', // filter row class; use widgetOptions.filter_cssFilter for the input/select element
-
-            };
-            $('#hospitalTable').tablesorter({
-                //widthFixed: true,
-                sortList: [
-                    [3, 0]
-                ],
-                theme: 'bootstrap',
-                headerTemplate: '{content} {icon}',
-                cssInfoBlock: 'avoid-sort',
-                widgets: ['filter', 'uitheme', 'staticRow'],
-                widgetOptions: {
-                    filter_columnFilters: true,
-                    filter_cssFilter: 'form-control'
-                }
-            }).tablesorterPager({
-                container: $('.pager-container'),
-                output: '{startRow} to {endRow} of {totalRows}'
-            });
-
-        });
-
-    /*function getGeography() {
-        $geoMenu.change(function(e) {
-            var geo = $geoMenu.filter(':checked').val();
-
-            for (var i = 0; i < sublayers.length; i++) {
-                if (i === layerID[geo]) {
-                    sublayers[i].show();
-                } else {
-                    sublayers[i].hide();
-                }
-            }
-            $('.geo-heading').text(geo);
-        });
-    }*/
-
-    function getOptions() {
+    function getOptions(json) {
 
         var condition;
         var column;
         var geo;
 
         $geoMenu.change(function() {
-            $condMenu.empty();
+            $condMenu.empty().detach();
             geo = $geoMenu.filter(':checked').val();
 
             $.each(json.selects.select, function(i, select) {
@@ -199,7 +202,9 @@ $(document).ready(function() {
                     });
                 }
             });
-            for (var i = 0; i < sublayers.length - 1; i++) {
+            $condMenu.appendTo($('#condition-container'));
+            
+            for (var i = 0; i < sublayers.length; i++) {
                 if (i === layerID[geo]) {
                     sublayers[i].show();
                 } else {
@@ -264,7 +269,7 @@ $(document).ready(function() {
     }
 
 
-    function createAreas(layer) {
+    /*function createAreas(layer) {
         $('#hospButton').click(function(e) {
             e.preventDefault();
             drawAreas(layer);
@@ -297,7 +302,7 @@ $(document).ready(function() {
         });
         layer.show();
 
-    }
+    }*/
 
     function updateQuery(geo, column) {
         var layer = sublayers[layerID[geo]];
@@ -335,7 +340,10 @@ $(document).ready(function() {
 
     function updateTable(data, geo, column) {
         var format = $condMenu.find(':selected').data('number');
-        $('tbody tr').remove();
+        var $hospitalTable = $('#hospitalTable');
+
+        var $tbody = $hospitalTable.find('tbody').empty().detach();
+        //$('tbody tr').remove();
         var dataArr = data.rows;
         $('#ct-heading').text('');
 
@@ -353,11 +361,14 @@ $(document).ready(function() {
             } else {
                 $row.addClass('clickable');
             }
-            $('tbody').append($row);
+            $tbody.append($row);
         });
 
+
+
         // want better way to do this: hide table columns based on geo
-        $('#hospitalTable th, #hospitalTable td').removeClass('hidden'); // show all th & td
+        $hospitalTable.find('th, td').removeClass('hidden');
+        //$('#hospitalTable th, #hospitalTable td').removeClass('hidden'); // show all th & td
         var $hiddenCol;
         if (geo === 'town') {
             $hiddenCol = $('.zip-col');
@@ -390,7 +401,9 @@ $(document).ready(function() {
 
         });
 
-        $('#hospitalTable').trigger('update');
+        $tbody.appendTo($hospitalTable);
+
+        $hospitalTable.trigger('update');
 
     }
 
