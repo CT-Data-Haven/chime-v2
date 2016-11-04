@@ -165,10 +165,10 @@ function createMaps(selects) {
                     //highlightPolygon(data, mapObj, sublayer); // is this legal?
                 });
                 sublayer.on('featureOver', function(event, latlng, pos, data) {
-                    highlightPolygon(data, mapObj, sublayer);
+                    //highlightPolygon(data, mapObj, sublayer);
                 });
                 sublayer.on('featureOut', function(event, latlng, pos, data) {
-                    removeHighlight(data, mapObj, sublayer);
+                    //removeHighlight(data, mapObj, sublayer);
                 });
 
             });
