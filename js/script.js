@@ -1,3 +1,5 @@
+// TODO: bind featureOver, featureOut handlers to highlight polygons
+
 // global variables
 
 var sublayers = [];
@@ -10,9 +12,12 @@ var layerID = {
 
 var geoStrings = {
     town: ['town', 'region'],
-    zip: ['town', 'town2', 'zip'],
+    zip: ['town', 'town2', 'zip', 'region'],
     region: ['region']
 };
+
+var hoverLayer;
+var highlighted; // holds highlighted polygon
 
 //var $typeMenu = $('input[type=radio][name=ageType]');
 //var $conditionsContainer = $('#conditionsContainer');
@@ -100,7 +105,10 @@ function createMaps(selects) {
             });
         });
         opts = opts.concat(geoStrings[geo]);
+        // add cartodb_id
+        opts.push('cartodb_id');
         columnArr[i] = opts;
+
     });
 
     // options
@@ -153,6 +161,14 @@ function createMaps(selects) {
                 cdb.vis.Vis.addInfowindow(mapObj, sublayer, columnArr[i]);
                 sublayer.on('featureClick', function(event, latlng, pos, data) {
                     updateInfowindow(data);
+                    // add a highlight style
+                    //highlightPolygon(data, mapObj, sublayer); // is this legal?
+                });
+                sublayer.on('featureOver', function(event, latlng, pos, data) {
+                    highlightPolygon(data, mapObj, sublayer);
+                });
+                sublayer.on('featureOut', function(event, latlng, pos, data) {
+                    removeHighlight(data, mapObj, sublayer);
                 });
 
             });
@@ -242,6 +258,8 @@ function bindOptions() {
         // reset table back to first page
         $('#hospitalTable').trigger('pageSet', 1);
 
+        // need to clear highlighted layer
+
     });
 
     // when condition changes, set ages back to defaults--age-adjusted, ages menu = all ages
@@ -249,6 +267,8 @@ function bindOptions() {
         $ageMenu.find('option').eq(0).prop('selected', true);
         $typeMenu.eq(0).prop('checked', true);
     });
+
+
 
     // trigger first input--town radio button
     $('.query-menu').eq(0).change();
@@ -340,7 +360,8 @@ function updateTable(data, geo, column) {
     dataArr.forEach(function(d) {
         d.rateDisplay = d.value === null ? 'Not available' : numeral(d.value).format(format);
         var zip = d.zip ? d.zip : '';
-        var town = d.town2 ? d.town2 : ( d.town ? d.town : '' );
+        //var town = d.town2 ? d.town2 : ( d.town ? d.town : '' );
+        var town = d.town2 && d.town ? d.town + '/' + d.town2 : ( d.town ? d.town : '' );
         var region = d.region ? d.region : '';
 
         var row = '<tr><td class="region-col">' + region + '</td>' +
@@ -401,11 +422,18 @@ function updateTable(data, geo, column) {
             $(this).find('th, td').eq(idx).addClass('hidden');
         });
     });
+    // change th Town to say Community if geo = zip
+    // want better way to do this--I hate having things hard-coded. maybe a global params object by geography?
+    if (geo === 'zip') {
+        $('th.town-col').text('Community');
+    } else {
+        $('th.town-col').text('Town');
+    }
 
     $hospitalTable.trigger('update');
 }
 
-function updateInfowindow(data) {
+function updateInfowindow(d) {
 
     var geo = $('input[type=radio][name=geography]').filter(':checked').val();
     var $condMenu = $('#conditionsContainer').find('#' + geo + 'Select');
@@ -416,17 +444,19 @@ function updateInfowindow(data) {
 
     var column = condition + age;
 
-    var zip = data.zip ? data.zip : '';
-    var town = data.town2 ? data.town2 : ( data.town ? data.town : '' );
-    var region = data.region ? data.region : '';
-    if (data.town && data.zip) {
+    var zip = d.zip ? d.zip : '';
+    //var town = data.town2 ? data.town2 : ( data.town ? data.town : '' );
+    var town = d.town2 && d.town ? d.town + '/' + d.town2 : ( d.town ? d.town : '' );
+
+    var region = d.region && geo !== 'zip' ? d.region : ''; // don't need region if geo is zip--find better way
+    if (d.town && d.zip) {
         town = '(' + town + ')';
     }
-    if (data.town && data.region) {
+    if (d.town && region.length > 0) {
         region = '(' + region + ')';
     }
 
-    var rate = data[column] !== undefined ? numeral(data[column]).format(format) : 'Not available';
+    var rate = d[column] !== undefined ? numeral(d[column]).format(format) : 'Not available';
 
     var $h4 = $('<h4 style="color: #333;">' + zip + ' ' + town + ' ' + region + '</h4>');
     var $h5 = $('<h5 style="color: #666;">' + condStr + ageStr + '</h5>');
@@ -456,4 +486,53 @@ function buildLegend(breaks, colors, geo) {
         colors: colors.reverse()
     });
     $('#map-container').append(legend.render().el);
+}
+
+function highlightPolygon(d, map, sublayer) {
+    var id = d.cartodb_id;
+    var highlightCSS = {
+        border: '2px solid #000',
+        fillOpacity: 0,
+        opacity: 1
+    };
+
+    var sql = new cartodb.SQL({ user: 'datahaven', format: 'geojson' });
+    var query = "SELECT cartodb_id, ST_Simplify(the_geom, 0.005) AS the_geom FROM (" + sublayer.getSQL() + " WHERE cartodb_id = " + id + ") AS wrapper";
+
+    /*hoverLayer = L.geoJson(null, {
+        style: {
+            color: 'purple',
+            fillColor: 'transparent',
+            //opacity: 0,
+            weight: 1
+        }
+    }).addTo(map);*/
+
+    sql.execute(query)
+        .done(function(geojson) {
+            if (highlighted) {
+                map.removeLayer(highlighted);
+            }
+            highlighted = L.geoJson(geojson, {
+                style: {
+                    color: '#000',
+                    fillColor: 'transparent',
+                    weight: 2,
+                    opacity: 1
+                }
+            }).addTo(map);
+            /*hoverLayer.addData(geojson);
+            hoverLayer.on('featureClick', function(e) {
+                console.log(e);
+                e.layer.setStyle(highlightCSS);
+            });*/
+        });
+
+}
+
+function removeHighlight(d, map, sublayer) {
+    if (highlighted) {
+        map.removeLayer(highlighted);
+    }
+
 }
